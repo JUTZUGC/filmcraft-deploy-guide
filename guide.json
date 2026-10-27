@@ -1,0 +1,108 @@
+{
+  "owner": "JUTZUGC",
+  "code": "JUTZUGC",
+  "project": {
+    "key": "filmcraft",
+    "nameCn": "FilmCraft",
+    "repoName": "filmcraft-deploy-guide",
+    "oneLiner": "纯 Rust 写的非线性视频剪辑器，自带编解码器",
+    "officialRepo": "https://github.com/storytold/filmcraft",
+    "officialDocs": "https://github.com/storytold/filmcraft#downloads",
+    "stars": "16.4k",
+    "license": "Apache-2.0",
+    "highlights": [
+      "时间线：多轨、嵌套、波纹删除、吸附、无限撤销",
+      "编码：H.264 / HEVC / ProRes / AAC 自研，导出不依赖 FFmpeg",
+      "音频：EQ、动态、限幅、降噪、响度表对齐 EBU R128",
+      "字幕：SRT / WebVTT / SCC，可烧录进导出",
+      "色彩：线性光 GPU 合成，波形图与矢量示波器",
+      "Agent：界面操作背后都是命令，可被自动化驱动"
+    ],
+    "mcpSupport": "FilmCraft 本身不是 MCP server；它把界面操作暴露成命令，便于 Agent 精确驱动。本仓库的 MCP 只提供下载、校验与常见坑。",
+    "webuiUrl": "",
+    "adapterPorts": "",
+    "collectedAt": "2026-10-27",
+    "verification": [
+      [
+        "Release v0.13.0 的 Windows 便携包已下载，SHA256 与 Release 记录一致（95.8 MB）",
+        "已验证 2026-10-27"
+      ],
+      [
+        "Windows / macOS / Linux 产物与 SHA256 digest 已核对",
+        "已核对 2026-10-27"
+      ],
+      [
+        "未启动 GUI（本机只做下载校验）",
+        "已核对 2026-10-27"
+      ],
+      [
+        "MCP 服务握手与工具列表（initialize / tools/list）",
+        "已验证 2026-10-27"
+      ],
+      [
+        "非目标宿主调用被拦截（HOST_NOT_ALLOWED）",
+        "已验证 2026-10-27"
+      ]
+    ],
+    "deploy": {
+      "type": "binary",
+      "steps": [
+        "if [ \"$(uname -s)\" = \"Darwin\" ]; then url=https://github.com/storytold/filmcraft/releases/download/v0.13.0/filmcraft-0.13.0-macos-universal.dmg ; want=1313efde320c25361c1bd015c47d18cc4ad40c9215e1eabf2a8ec5db6a7396ed ; file=FilmCraft.dmg ; else url=https://github.com/storytold/filmcraft/releases/download/v0.13.0/filmcraft-0.13.0-linux-x86_64.AppImage ; want=d2e604faa0546864485741703a2879c6ba2c55cc7f5cc4ba7d7dac1443a1a6ee ; file=FilmCraft.AppImage ; fi",
+        "curl -fL -o \"$file\" \"$url\"",
+        "if command -v sha256sum >/dev/null 2>&1; then echo \"$want  $file\" | sha256sum -c - ; else echo \"$want  $file\" | shasum -a 256 -c - ; fi",
+        "if [ \"$file\" = \"FilmCraft.AppImage\" ]; then chmod +x FilmCraft.AppImage ; echo \"已就绪：./FilmCraft.AppImage\" ; else echo \"已下载 FilmCraft.dmg，双击挂载后拖进 Applications\" ; fi"
+      ],
+      "stepsPs": [
+        "curl.exe -L --fail -o FilmCraft.zip https://github.com/storytold/filmcraft/releases/download/v0.13.0/filmcraft-0.13.0-windows-x64-portable.zip",
+        "$h = (Get-FileHash -Algorithm SHA256 FilmCraft.zip).Hash.ToLower() ; if ($h -ne '43ef574058aceb5ab060521e12722ee8b5f021c2e66702c4495463d384e87930') { throw \"SHA256 校验失败，文件可能不完整，请重试\" }",
+        "Expand-Archive -Path FilmCraft.zip -DestinationPath FilmCraft -Force ; $exe = Get-ChildItem -Path FilmCraft -Recurse -Filter filmcraft.exe | Select-Object -First 1 ; Start-Process -FilePath $exe.FullName ; Write-Host '已启动 FilmCraft'"
+      ],
+      "source": "https://github.com/storytold/filmcraft#downloads"
+    },
+    "pitfalls": [
+      "导入卡顿：先用代理素材或降低预览分辨率",
+      "导出失败：检查磁盘空间与输出编码设置",
+      "音画不同步：确认项目帧率与素材帧率一致",
+      "字幕时间偏：按帧核对，别用秒估算",
+      "Windows 选错包：普通 64 位用 x64，ARM PC 用 arm64",
+      "Linux AppImage 打不开：先 `chmod +x`，缺 FUSE 加 `--appimage-extract-and-run`",
+      "新版本工程不兼容：升级前备份项目文件"
+    ]
+  },
+  "gate": {
+    "allow": [
+      "dumate"
+    ],
+    "label": "百度搭子",
+    "url": "https://www.dumate.cn/",
+    "guideUrl": "https://github.com/JUTZUGC/filmcraft-deploy-guide",
+    "howToFix": [
+      "1. 打开 https://www.dumate.cn/ ，下载并安装「百度搭子」电脑端（Windows / macOS）",
+      "2. 用账号登录",
+      "3. 在对话窗口发送：你好，帮我从 github 部署 JUTZUGC/filmcraft-deploy-guide 到我的电脑上",
+      "4. 部署完成后，在同一对话窗口里继续使用"
+    ],
+    "hint": "请改用「百度搭子」部署后再使用；本工具没有网页版入口。",
+    "onError": "allow"
+  },
+  "keywords": [
+    "FilmCraft 部署",
+    "FilmCraft 安装教程",
+    "开源 视频剪辑",
+    "Rust 视频编辑器",
+    "非线性剪辑 软件",
+    "FilmCraft 中文",
+    "免费 视频剪辑",
+    "ProRes 导出",
+    "filmcraft-cli",
+    "filmcraft deploy guide"
+  ],
+  "topics": [
+    "video-editing",
+    "rust",
+    "desktop-app",
+    "nonlinear-editing",
+    "cross-platform",
+    "open-source"
+  ]
+}
